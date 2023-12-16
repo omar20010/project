@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $conn = mysqli_connect("localhost", "root", "", "users");
 
 // Check connection
@@ -8,12 +10,11 @@ if (!$conn) {
 
 // Handle form submission and database interaction here
 
-// Insert user data into the database
 if (isset($_POST["submit"])) {
     $fname = mysqli_real_escape_string($conn, $_POST["fname"]);
     $lname = mysqli_real_escape_string($conn, $_POST['lname']);
     $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $password = MD5(mysqli_real_escape_string($conn, $_POST['password']));
+    $password = password_hash(mysqli_real_escape_string($conn, $_POST['password']), PASSWORD_DEFAULT); // Hashing the password securely
     $phone = mysqli_real_escape_string($conn, $_POST["phone"]);
 
     // Use prepared statements to prevent SQL injection
@@ -28,6 +29,11 @@ if (isset($_POST["submit"])) {
 
     // Close the statement
     mysqli_stmt_close($stmt);
+
+    $_SESSION['username'] = $username;
+
+    header("Location: welcome.php");
+    exit();
 }
 
 // Close the connection
@@ -52,7 +58,7 @@ mysqli_close($conn);
     <!-- Include the common header on all pages -->
     <div id="header-container">
         <!-- Include the header content here -->
-        <?php include "./parts/navbar.php"; ?>
+        <?php include "navbar.php"; ?>
     </div>
 
     <!-- Main content of the page goes here -->

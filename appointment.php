@@ -22,7 +22,7 @@
 <!-- Include the common header on all pages -->
 <div id="header-container">
         <!-- Include the header content here -->
-        <?php include "./parts/navbar.php"; ?>
+        <?php include "navbar.php"; ?>
     </div>
 
 

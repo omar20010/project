@@ -1,9 +1,18 @@
 <?php
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['username'])) {
+    // Redirect to the login page or display a message
+    header("Location: login.php"); // Change "login.php" to the actual login page
+    exit();
+}
+
 $conn = mysqli_connect("localhost", "root", "", "users");
+
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-
 
 if (isset($_POST["submit"])) {
     $carType = mysqli_real_escape_string($conn, $_POST['carType']);
@@ -11,12 +20,16 @@ if (isset($_POST["submit"])) {
     $whatToDo = mysqli_real_escape_string($conn, $_POST['whatToDo']);
     $dateTime = mysqli_real_escape_string($conn, $_POST['dateTime']);
     $customerProblem = mysqli_real_escape_string($conn, $_POST['customerProblem']);
+
     // Use prepared statements to prevent SQL injection
-    $sql = "INSERT INTO appointments (car_type, car_model, what_to_do, date_time, customer_problem) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO appointments (user_id, car_type, car_model, what_to_do, date_time, customer_problem) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
 
+    // Get the user's ID from the session
+    $userID = $_SESSION['user_id']; // Assuming you have a 'user_id' in your session
+
     // Bind parameters
-    mysqli_stmt_bind_param($stmt,"sssss", $carType, $carModel, $whatToDo, $dateTime, $customerProblem);
+    mysqli_stmt_bind_param($stmt, "isssss", $userID, $carType, $carModel, $whatToDo, $dateTime, $customerProblem);
 
     // Execute the statement
     mysqli_stmt_execute($stmt);
@@ -24,6 +37,7 @@ if (isset($_POST["submit"])) {
     // Close the statement
     mysqli_stmt_close($stmt);
 }
+
 mysqli_close($conn);
 ?>
 
@@ -42,7 +56,7 @@ mysqli_close($conn);
     <!-- Include the common header on all pages -->
     <div id="header-container">
         <!-- Include the header content here -->
-        <?php include "./parts/navbar.php"; ?>
+        <?php include "navbar.php"; ?>
     </div>
 
     <!-- Main content of the page goes here -->
