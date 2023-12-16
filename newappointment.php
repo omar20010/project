@@ -26,7 +26,7 @@ if (isset($_POST["submit"])) {
     $stmt = mysqli_prepare($conn, $sql);
 
     // Get the user's ID from the session
-    $userID = $_SESSION['user_id']; // Assuming you have a 'user_id' in your session
+    // $_SESSION['user_id'] = $userID;// Assuming you have a 'user_id' in your session
 
     // Bind parameters
     mysqli_stmt_bind_param($stmt, "isssss", $userID, $carType, $carModel, $whatToDo, $dateTime, $customerProblem);
