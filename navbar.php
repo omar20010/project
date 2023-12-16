@@ -6,6 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -49,7 +50,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         </ul>
                     </li>
                     <!-- Show "Welcome" link only if the user is logged in -->
-                    <?php 
+                    <?php
                     if (isset($_SESSION['username'])) {
                         echo '
                             <li class="nav-item">
